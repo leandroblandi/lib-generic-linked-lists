@@ -1,0 +1,31 @@
+# depslib dependency file v1.0
+1727401319 source:c:\proyectos\practicas ayed\ayed-lib-listas-genericas-44098528\main.c
+	<stdio.h>
+	<stdlib.h>
+	"lista.h"
+	"nodo.h"
+	"funciones.h"
+
+1727400354 source:c:\proyectos\practicas ayed\ayed-lib-listas-genericas-44098528\lista.c
+	<stdio.h>
+	<stdlib.h>
+	"lista.h"
+
+1727397533 c:\proyectos\practicas ayed\ayed-lib-listas-genericas-44098528\lista.h
+	"nodo.h"
+
+1727398036 c:\proyectos\practicas ayed\ayed-lib-listas-genericas-44098528\nodo.h
+
+1727398062 source:c:\proyectos\practicas ayed\ayed-lib-listas-genericas-44098528\nodo.c
+	<stdio.h>
+	<stdlib.h>
+	"nodo.h"
+
+1727399223 c:\proyectos\practicas ayed\ayed-lib-listas-genericas-44098528\funciones.h
+
+1727400256 source:c:\proyectos\practicas ayed\ayed-lib-listas-genericas-44098528\funciones.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"funciones.h"
+
