@@ -304,19 +304,13 @@ int busquedaBinaria(ListaPtr lista, DatoPtr dato, int (*cmp)(void *, void *)) {
     return -1;
 }
 
-ListaPtr duplicarLista(ListaPtr listaOriginal) {
+ListaPtr duplicarLista(ListaPtr lista) {
     ListaPtr nuevaLista = crearLista();
+    NodoPtr nodoActual = lista->nodo;
 
-    if (listaOriginal == NULL || getNodo(listaOriginal) == NULL) {
-        return nuevaLista;
-    }
-
-    NodoPtr actualOriginal = getNodo(listaOriginal);
-
-    while (actualOriginal != NULL) {
-        DatoPtr datoOriginal = getDato(actualOriginal);
-        insertarFinal(nuevaLista, nuevoNodo);
-        actualOriginal = getSiguiente(actualOriginal);
+    while (nodoActual != NULL) {
+        insertarFinal(nuevaLista, getDato(nodoActual));
+        nodoActual = getSiguiente(nodoActual);
     }
 
     return nuevaLista;
