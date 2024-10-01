@@ -40,7 +40,7 @@ void destruirLista(ListaPtr lista) {
     }
 }
 
-void mostrarLista(ListaPtr lista, void(*mostrarNodoFunc)(NodoPtr)) {
+void mostrarLista(ListaPtr lista, void(*mostrar)(DatoPtr)) {
     if (lista == NULL) {
         printf("\n[ERROR] Lista con valor NULL\n");
     }
@@ -57,7 +57,7 @@ void mostrarLista(ListaPtr lista, void(*mostrarNodoFunc)(NodoPtr)) {
     NodoPtr nodo = lista->nodo;
 
     for (int i = 0; i < largo; i++) {
-        mostrarNodoFunc(nodo);
+        mostrar(getDato(nodo));
         nodo = getSiguiente(nodo);
     }
 
@@ -199,30 +199,32 @@ void ordenarListaSeleccion(ListaPtr lista, int (*cmp)(void *, void *)) {
         return;
     }
 
-    int largo = obtenerLargo(lista);
-    NodoPtr nodoActual = NULL;
-    NodoPtr nodoMinimo = NULL;
+    NodoPtr nodoActual = lista->nodo;
+    NodoPtr nodoMinimo, nodoIterador;
 
-    for (int i = 0; i < largo - 1; i++) {
-        nodoActual = lista->nodo;
-
+    while (nodoActual != NULL) {
         nodoMinimo = nodoActual;
-        for (int j = i + 1; j < largo; j++) {
-            nodoActual = getSiguiente(nodoActual);
-            if (cmp(getDato(nodoActual), getDato(nodoMinimo)) < 0) {
-                nodoMinimo = nodoActual;
+        nodoIterador = getSiguiente(nodoActual);
+
+        // Buscar el mínimo desde nodoActual hasta el final
+        while (nodoIterador != NULL) {
+            if (cmp(getDato(nodoIterador), getDato(nodoMinimo)) < 0) {
+                nodoMinimo = nodoIterador;
             }
+            nodoIterador = getSiguiente(nodoIterador);
         }
 
-        if (nodoMinimo != lista->nodo) {
-            DatoPtr valorAuxiliar = getDato(lista->nodo);
-            setDato(lista->nodo, getDato(nodoMinimo));
-            setDato(nodoMinimo, valorAuxiliar);
+        // Si encontramos un nuevo mínimo, intercambiamos los datos
+        if (nodoMinimo != nodoActual) {
+            DatoPtr datoAux = getDato(nodoActual);
+            setDato(nodoActual, getDato(nodoMinimo));
+            setDato(nodoMinimo, datoAux);
         }
 
-        lista->nodo = getSiguiente(lista->nodo);
+        nodoActual = getSiguiente(nodoActual);
     }
 }
+
 
 void ordenarListaInsercion(ListaPtr lista, int (*cmp)(void *, void *)) {
     if (lista == NULL || obtenerLargo(lista) == 0 || cmp == NULL) {
@@ -230,25 +232,29 @@ void ordenarListaInsercion(ListaPtr lista, int (*cmp)(void *, void *)) {
     }
 
     NodoPtr nodoActual = lista->nodo;
-    NodoPtr nodoSiguiente;
+    NodoPtr nodoOrdenado = NULL;
 
     while (nodoActual != NULL) {
-        nodoSiguiente = getSiguiente(nodoActual);
-        NodoPtr nodoPrevio = lista->nodo;
+        NodoPtr nodoSiguiente = getSiguiente(nodoActual);
 
-        while (nodoPrevio != nodoActual && cmp(getDato(nodoActual), getDato(nodoPrevio)) < 0) {
-            nodoPrevio = getSiguiente(nodoPrevio);
-        }
+        if (nodoOrdenado == NULL || cmp(getDato(nodoActual), getDato(nodoOrdenado)) < 0) {
 
-        if (nodoPrevio != nodoActual) {
-            DatoPtr valorAuxiliar = getDato(nodoActual);
-            setDato(nodoActual, getDato(nodoPrevio));
+            setSiguiente(nodoActual, nodoOrdenado);
+            nodoOrdenado = nodoActual;
+        } else {
+            NodoPtr nodoInsert = nodoOrdenado;
+            while (getSiguiente(nodoInsert) != NULL && cmp(getDato(nodoActual), getDato(getSiguiente(nodoInsert))) > 0) {
+                nodoInsert = getSiguiente(nodoInsert);
+            }
 
-            setDato(nodoPrevio, valorAuxiliar);
+            setSiguiente(nodoActual, getSiguiente(nodoInsert));
+            setSiguiente(nodoInsert, nodoActual);
         }
 
         nodoActual = nodoSiguiente;
     }
+
+    lista->nodo = nodoOrdenado;
 }
 
 
@@ -304,17 +310,38 @@ int busquedaBinaria(ListaPtr lista, DatoPtr dato, int (*cmp)(void *, void *)) {
     return -1;
 }
 
-ListaPtr duplicarLista(ListaPtr lista) {
+ListaPtr duplicarLista(ListaPtr lista, void* (*copiar)(void*)) {
+    if (lista == NULL) {
+        return NULL;
+    }
+
     ListaPtr nuevaLista = crearLista();
-    NodoPtr nodoActual = lista->nodo;
+    if (nuevaLista == NULL) {
+        return NULL;
+    }
+
+    NodoPtr nodoActual = getNodo(lista);
 
     while (nodoActual != NULL) {
-        insertarFinal(nuevaLista, getDato(nodoActual));
+        void* datoCopia = copiar(getDato(nodoActual));
+        if (datoCopia == NULL) {
+            destruirLista(nuevaLista);
+            return NULL;
+        }
+
+        NodoPtr nuevoNodo = crearNodo(datoCopia);
+        if (nuevoNodo == NULL) {
+            destruirLista(nuevaLista);
+            return NULL;
+        }
+
+        insertarFinal(nuevaLista, nuevoNodo);
         nodoActual = getSiguiente(nodoActual);
     }
 
     return nuevaLista;
 }
+
 
 void setNodo(ListaPtr lista, NodoPtr nodo) {
     lista->nodo = nodo;

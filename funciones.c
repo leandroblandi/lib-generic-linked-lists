@@ -43,7 +43,7 @@ int compararFloat(void * d1, void * d2) {
     }
 }
 
-void chequearParametros(const void * d1, const void * d2) {
+void chequearParametros(void * d1, void * d2) {
     if (d1 == NULL || d2 == NULL) {
         return;
     }

@@ -17,7 +17,7 @@ void destruirLista(ListaPtr lista);
 /// @brief Imprime por consola una lista generica
 /// @param lista
 /// @param mostrarNodoFunc(NodoPtr) La funcion callback a mostrar nodo segun tipo de dato
-void mostrarLista(ListaPtr lista, void(*mostrarNodoFunc)(NodoPtr));
+void mostrarLista(ListaPtr lista, void(*mostrar)(DatoPtr));
 
 /// @brief Retorna el largo de la lista
 /// @param lista
@@ -75,7 +75,7 @@ int busquedaBinaria(ListaPtr lista, DatoPtr dato, int (*cmp)(void *, void *));
 
 /// @brief Crea una nueva lista con los mismos valores que la lista
 ///        ya existente, con nuevas direcciones de memoria
-ListaPtr duplicarLista(ListaPtr listaOriginal)
+ListaPtr duplicarLista(ListaPtr lista, void* (*copiar)(void*));
 
 /// @brief Asigna un nuevo valor al Nodo principal de la Lista
 /// @param lista
