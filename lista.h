@@ -28,6 +28,12 @@ int obtenerLargo(ListaPtr lista);
 /// @param nodo
 void insertarPrincipio(ListaPtr lista, NodoPtr nodo);
 
+/// @brief Inserta un nuevo Nodo de manera ordenada
+/// @param lista
+/// @param nuevoNodo
+/// @param cmp La funcion que compara los datos de los Nodos
+void insertarEnOrden(ListaPtr lista, NodoPtr nuevoNodo, int (*cmp)(void *, void *));
+
 /// @brief Inserta un Nodo al final de la Lista
 /// @param lista
 /// @param nodo
@@ -66,6 +72,10 @@ int busquedaLineal(ListaPtr lista, DatoPtr dato, int (*cmp)(void *, void *));
 /// @param dato
 /// @param cmp(void*, void*) La funcion comparadora
 int busquedaBinaria(ListaPtr lista, DatoPtr dato, int (*cmp)(void *, void *));
+
+/// @brief Crea una nueva lista con los mismos valores que la lista
+///        ya existente, con nuevas direcciones de memoria
+ListaPtr duplicarLista(ListaPtr listaOriginal)
 
 /// @brief Asigna un nuevo valor al Nodo principal de la Lista
 /// @param lista

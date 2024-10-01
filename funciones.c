@@ -22,8 +22,8 @@ int compararInt(void * d1, void * d2) {
 int compararChar(void * d1, void * d2) {
     chequearParametros(d1, d2);
 
-    char * dato1 = (char *) d1;
-    char * dato2 = (char *) d2;
+    const char * dato1 = (char *) d1;
+    const char * dato2 = (char *) d2;
 
     return strcmp(dato1, dato2);
 }
@@ -43,7 +43,7 @@ int compararFloat(void * d1, void * d2) {
     }
 }
 
-void chequearParametros(void * d1, void * d2) {
+void chequearParametros(const void * d1, const void * d2) {
     if (d1 == NULL || d2 == NULL) {
         return;
     }

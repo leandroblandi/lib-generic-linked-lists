@@ -146,6 +146,29 @@ void insertarEnPosicion(ListaPtr lista, NodoPtr nodo, int posicion) {
     setSiguiente(nodo, nodoAux);
 }
 
+void insertarEnOrden(ListaPtr lista, NodoPtr nuevoNodo, int (*cmp)(void *, void *)) {
+    if (lista == NULL || nuevoNodo == NULL) {
+        return;
+    }
+
+    NodoPtr actual = getNodo(lista);
+    NodoPtr anterior = NULL;
+
+    if (actual == NULL || cmp(getDato(nuevoNodo), getDato(actual)) <= 0) {
+        setSiguiente(nuevoNodo, actual);
+        setNodo(lista, nuevoNodo);
+        return;
+    }
+
+    while (actual != NULL && cmp(getDato(nuevoNodo), getDato(actual)) > 0) {
+        anterior = actual;
+        actual = getSiguiente(actual);
+    }
+
+    setSiguiente(nuevoNodo, actual);
+    setSiguiente(anterior, nuevoNodo);
+}
+
 void ordenarListaBurbujeo(ListaPtr lista, int (*cmp)(void *, void *)) {
     if (lista == NULL || obtenerLargo(lista) == 0 || cmp == NULL) {
         return;
@@ -177,7 +200,8 @@ void ordenarListaSeleccion(ListaPtr lista, int (*cmp)(void *, void *)) {
     }
 
     int largo = obtenerLargo(lista);
-    NodoPtr nodoActual, nodoMinimo;
+    NodoPtr nodoActual = NULL;
+    NodoPtr nodoMinimo = NULL;
 
     for (int i = 0; i < largo - 1; i++) {
         nodoActual = lista->nodo;
@@ -278,6 +302,24 @@ int busquedaBinaria(ListaPtr lista, DatoPtr dato, int (*cmp)(void *, void *)) {
     }
 
     return -1;
+}
+
+ListaPtr duplicarLista(ListaPtr listaOriginal) {
+    ListaPtr nuevaLista = crearLista();
+
+    if (listaOriginal == NULL || getNodo(listaOriginal) == NULL) {
+        return nuevaLista;
+    }
+
+    NodoPtr actualOriginal = getNodo(listaOriginal);
+
+    while (actualOriginal != NULL) {
+        DatoPtr datoOriginal = getDato(actualOriginal);
+        insertarFinal(nuevaLista, nuevoNodo);
+        actualOriginal = getSiguiente(actualOriginal);
+    }
+
+    return nuevaLista;
 }
 
 void setNodo(ListaPtr lista, NodoPtr nodo) {
